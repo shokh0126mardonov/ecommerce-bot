@@ -7,7 +7,7 @@ from db import User,SessionLocal
 from .ecommerce_menu import send_menu
 
 def get_full_name(update:Update,context:CallbackContext):
-    context.user_data['full_name'] = update.message.text.strip()
+    context.user_data['full_name'] = update.message.text.strip().title()
 
     update.message.reply_text(
         'Yoshizni yuboring!'
