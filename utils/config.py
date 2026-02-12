@@ -14,3 +14,7 @@ class Data:
 
 
 settings = Data()
+
+class Register:
+   full_name,age,contact,confirm = range(4)
+    
