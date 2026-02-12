@@ -20,7 +20,8 @@ def main():
             Register.contact : [MessageHandler(Filters.contact,get_contact)],
             Register.confirm:[CallbackQueryHandler(confirm_data, pattern=r"^confirm_")]
         },
-        fallbacks=[]
+        fallbacks=[],
+        allow_reentry=True
     )
     dispatcher.add_handler(register_handler)
 

@@ -1,9 +1,10 @@
-from telegram import Update
+from telegram import Update,ReplyKeyboardRemove
 from telegram.ext import CallbackContext
 
 from utils import Register
 from ..buttons import confirm,contact
 from db import User,SessionLocal
+from .ecommerce_menu import send_menu
 
 def get_full_name(update:Update,context:CallbackContext):
     context.user_data['full_name'] = update.message.text.strip()
@@ -45,9 +46,9 @@ def confirm_data(update: Update, context: CallbackContext):
     db = SessionLocal()
     if action == "confirm_yes":
         new_user = User(
-        chat_id = update.effective_user.id,
+        chat_id = int(update.effective_user.id),
         phone = context.user_data['contact'],
-        age = context.user_data['age'],
+        age = int(context.user_data['age']),
         full_name = context.user_data['full_name'],
         username = update.effective_user.username,
         )
@@ -55,9 +56,10 @@ def confirm_data(update: Update, context: CallbackContext):
         db.add(new_user)
         db.commit()
         query.edit_message_text("✅ Ma'lumotlar saqlandi")
-        return Register.END
+        context.user_data.clear()
+        send_menu(update,context)
 
     elif action == "confirm_retry":
-        query.edit_message_text("🔁 Qaytadan boshlaymiz")
+        query.edit_message_text("Ism-sharifingizni yuboring!")
         context.user_data.clear()
         return Register.full_name
