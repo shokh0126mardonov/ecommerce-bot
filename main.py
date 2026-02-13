@@ -11,19 +11,17 @@ def main():
     dispatcher = updater.dispatcher
 
     register_handler = ConversationHandler(
-
         entry_points=[CommandHandler('start',start)],
-
         states={
             Register.full_name : [MessageHandler(Filters.text,get_full_name)],
             Register.age : [MessageHandler(Filters.text,get_age)],
             Register.contact : [MessageHandler(Filters.contact,get_contact)],
             Register.confirm:[CallbackQueryHandler(confirm_data, pattern=r"^confirm_")]
         },
-        fallbacks=[],
-        allow_reentry=True
+        fallbacks=[dispatcher.add_handler(CommandHandler('start', start))],
     )
     dispatcher.add_handler(register_handler)
+    # dispatcher.add_handler(CommandHandler('start', start))
 
     updater.start_polling()
     updater.idle()
