@@ -1,3 +1,5 @@
+import time
+
 from telegram import Update,ReplyKeyboardRemove
 from telegram.ext import CallbackContext
 
@@ -33,18 +35,30 @@ def get_age(update:Update,context:CallbackContext):
 
     return Register.contact 
 
-def get_contact(update:Update,context:CallbackContext):
+def get_contact(update: Update, context: CallbackContext):
     context.user_data['contact'] = update.message.contact.phone_number
+
     data = (
-    f"Ism: {context.user_data['full_name']}\n"
-    f"Yosh: {context.user_data['age']}\n"
-    f"Telefon: {context.user_data['contact']}"
+        f"Ism: {context.user_data['full_name']}\n"
+        f"Yosh: {context.user_data['age']}\n"
+        f"Telefon: {context.user_data['contact']}"
     )
+
     update.message.reply_text(
-        f'Malumotlaringizni tasdiqlang!\n{data}',
-        reply_markup=confirm())
-    
+        "Ma'lumotlaringiz tayyorlanmoqda!",
+        reply_markup=ReplyKeyboardRemove()
+    )
+
+    time.sleep(1)
+
+    update.message.reply_text(
+        text=f"Ma'lumotlaringizni tasdiqlang!\n{data}",
+        reply_markup=confirm()  
+    )
+
     return Register.confirm
+
+
 
 def confirm_data(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -52,6 +66,7 @@ def confirm_data(update: Update, context: CallbackContext):
 
     action = query.data  
     db = SessionLocal()
+
     if action == "confirm_yes":
         new_user = User(
         chat_id = int(update.effective_user.id),
