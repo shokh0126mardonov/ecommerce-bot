@@ -2,9 +2,17 @@ from telegram import Update,ReplyKeyboardRemove
 from telegram.ext import CallbackContext
 
 from utils import Register
-from ..buttons import confirm,contact
+from ..buttons import confirm,contact,start_register_button
 from db import User,SessionLocal
 from .ecommerce_menu import send_menu
+
+
+def start_register(update:Update,context:CallbackContext):
+    query = update.callback_query
+    query.answer()
+
+    query.message.reply_text("ism-sharifingiz")
+    return Register.full_name
 
 def get_full_name(update:Update,context:CallbackContext):
     context.user_data['full_name'] = update.message.text.strip().title()

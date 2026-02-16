@@ -4,6 +4,7 @@ from telegram import Update
 from db import User,SessionLocal
 from utils import Register
 from ..message_handlers import send_menu
+from ..buttons import start_register_button
 
 def start(update: Update, context: CallbackContext):
     db = SessionLocal()
@@ -15,9 +16,8 @@ def start(update: Update, context: CallbackContext):
         update.message.reply_text(
             f"Salom {update.effective_user.full_name}! "
             "Ecommerce botga xush kelibsiz.\n"
-            "Ro'yxatdan o'tish uchun ism-sharifingizni yuboring!"
+            "Ro'yxatdan o'tish uchun pastdagi tugmani bosing!",
+            reply_markup=start_register_button()
         )
-        return Register.full_name
-
+        return 
     send_menu(update, context)
-    return ConversationHandler.END
